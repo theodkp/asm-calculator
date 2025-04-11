@@ -20,7 +20,7 @@ _start:
 	mov rdx, input_msg_len
 	syscall
 
-    ; TODO: read into buffer
+    ; read number input into buffer
     mov rax, 0
     mov rdi, 0 
     mov rsi, buffer
@@ -28,9 +28,9 @@ _start:
     syscall
 
 
-    ;
-    mov r10, 0
-    mov rsi, buffer
+    
+    mov r10, 0 ; r10 acts as a our counter
+    mov rsi, buffer 
 
 parse_loop:
     ; gets 1 byte value from the memory address in rsi and stores it in al
