@@ -14,11 +14,11 @@ section .text
 _start:
 
     ; print input message
-	mov rax, 1
-	mov rdi, 1
-	mov rsi, input_msg
-	mov rdx, input_msg_len
-	syscall
+    mov rax, 1
+    mov rdi, 1
+    mov rsi, input_msg
+    mov rdx, input_msg_len
+    syscall
 
     ; read number input into buffer
     mov rax, 0
