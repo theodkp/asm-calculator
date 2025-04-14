@@ -137,7 +137,7 @@ done_math:
 
 
     mov r14, r10
-    mov r11, output 
+    mov r15, output 
 
 
 ; converting back into ascii
@@ -159,8 +159,8 @@ itoa_loop:
     
     add dl, '0' ; add ascii 0 to change int to ascii
     
-    mov [r11], dl ; storing each character into our output buffer
-    inc r11 ; increment our pointer in our output buffer (stored in r11)
+    mov [r15], dl ; storing each character into our output buffer
+    inc r15 ; increment our pointer in our output buffer (stored in r11)
     
     mov r14,rax ; store the quotient back in r14 to do the next number 
     jmp itoa_loop
@@ -172,7 +172,7 @@ itoa_done:
 
     ; reverse init
     mov r12, output ; r12 stores the beginning of our output buffer
-    mov r13, r11 ; r13 stores the end of our inputed number + 1
+    mov r13, r15 ; r13 stores the end of our inputed number + 1
     dec r13 ; decrement so it lines up with end of inputed number
 
 
@@ -203,7 +203,7 @@ reverse_loop:
 reverse_done:
 
     ; output answer to our expresssion
-    mov rdx, r11        
+    mov rdx, r15        
     sub rdx, output 
     mov rax, 1
     mov rdi, 1
