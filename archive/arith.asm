@@ -13,21 +13,21 @@ section .text
     global _start
 
 _start:
-    ; 1. Print input_msg
+    ; Print input_msg
     mov rax, 1
     mov rdi, 1
     mov rsi, input_msg
     mov rdx, input_msg_len
     syscall
 
-    ; 2. Read into buffer
+    ; Read expression into buffer
     mov rax, 0 
     mov rdi, 0 
     mov rsi, buffer
     mov rdx, 100
     syscall
 
-; 3. Parse first number into r10
+; atoi first number
 
     mov rsi, buffer
     mov r10, 0
@@ -49,6 +49,7 @@ first_atoi_loop:
     je get_operator
 
 
+    ; atoi code
     sub al, '0'
     imul r10, r10,10
     movzx rax,al
@@ -59,7 +60,7 @@ first_atoi_loop:
 
 
 
-; 4. Detect operator 
+; get operator 
 
 get_operator:
     mov bl, al
@@ -67,7 +68,7 @@ get_operator:
 
 
 
-; 5. Parse second number into r11
+; atoi second number
 
     mov r11,0
 
@@ -93,7 +94,7 @@ second_atoi_loop:
 
 second_atoi_done:
 
-; 6. Compare operator, jump to + / - / * / /
+; jump to operation 
 
     cmp bl, '+'
     je addition
@@ -110,6 +111,7 @@ second_atoi_done:
     jmp done_math
 
 
+; perform operations
 addition:
     add r10, r11
     jmp done_math
@@ -138,6 +140,7 @@ done_math:
     mov r11, output 
 
 
+; converting back into ascii
 itoa_loop:
 
     
@@ -199,7 +202,7 @@ reverse_loop:
 
 reverse_done:
 
-
+    ; output answer to our expresssion
     mov rdx, r11        
     sub rdx, output 
     mov rax, 1
