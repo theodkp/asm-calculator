@@ -16,6 +16,7 @@ section .text
     global _start
 
 _start:
+    
     ; Print input message
     mov rax, 1
     mov rdi, 1
@@ -23,7 +24,7 @@ _start:
     mov rdx, input_msg_len
     syscall
 
-    ; Read expression into buffer
+    ; Read expression from user input into buffer
     mov rax, 0 
     mov rdi, 0 
     mov rsi, buffer
@@ -38,16 +39,11 @@ _start:
 
     cmp byte [rsi], '-' ; check if first inputed character is negative
     
-    je is_negative ; if negative jump to is negative 
-    
+    jne first_atoi_loop ; if negative jump to is negative 
 
-    jmp first_atoi_loop ; if positive, make sure we jump over is_negative label
-
-
-is_negative:
-    
     mov r8b,1 ; set flag
     inc rsi ; increment past the negative symbol to our first number
+
 
 first_atoi_loop:
     
@@ -72,10 +68,7 @@ first_atoi_loop:
     inc rsi
     jmp first_atoi_loop
 
-
-
 ; Get operator
-
 get_operator:
     mov bl, al
     inc rsi
@@ -87,14 +80,8 @@ get_operator:
 
     cmp byte[rsi], '-' ; check if negative
     
-    je second_is_negative ; jump to setting negative flag
+    jne second_atoi_loop ; jump to setting negative flag
 
-    jmp second_atoi_loop
-    
-    
-    
-    
-second_is_negative:
     mov r9b,1 ; set flag
     inc rsi ; increment past the negative symbol to our first number
 
@@ -117,24 +104,16 @@ second_atoi_loop:
 ; check if negative flags are set for either numbers
 check_negate_first:
     cmp r8b,1
-    je negate_first
-    
-    jmp check_negate_second
+    jne check_negate_second
 
-negate_first:
     neg r10
 
 check_negate_second:
     cmp r9b,1
-    je negate_second
-    jmp second_atoi_done
+    jne second_atoi_done
 
-
-negate_second:
     neg r11
-
-
-; After parsing second number
+         
 second_atoi_done:
 
 ; Jump to operation
@@ -191,17 +170,23 @@ done_math:
     mov r14, r10
     mov r15, output
 
-cmp r14, 0
-jns itoa_negative_done ; if positive, skip
+    cmp r14, 0
+    jns itoa_negative_done ; if positive, skip
 
-itoa_negative:
+    ; adding negative sign to our output
     neg r14
     mov byte [r15], '-'
     inc r15
 
 
 itoa_negative_done:
-
+    cmp r14, 0
+    jne itoa_loop
+    
+    ; if value is zero, add '0' character
+    mov byte [r15], '0'
+    inc r15
+    jmp itoa_done
 
 ; Converting back into ASCII
 itoa_loop:
@@ -226,6 +211,7 @@ itoa_done:
     mov r13, r15
     dec r13
 
+    ; increment past our negative sign if we have one
     cmp byte[r12],'-'
     jne reverse_loop
 
